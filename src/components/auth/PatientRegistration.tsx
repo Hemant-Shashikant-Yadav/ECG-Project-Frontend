@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../services/api";
+import {
+  User,
+  Mail,
+  Lock,
+  Calendar,
+  Users,
+  Weight,
+  Ruler,
+  FileText,
+} from "lucide-react";
 import type { Patient } from "../../types/models";
 
 export default function PatientRegistration() {
@@ -45,67 +55,80 @@ export default function PatientRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">
-          Patient Registration
-        </h2>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <User className="mx-auto h-12 w-12 text-blue-600" />
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Patient Registration
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Create your personal health account
+          </p>
+        </div>
 
         {error && (
-          <div className="mb-4 p-2 text-sm text-red-700 bg-red-100 rounded-md">
+          <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-600 animate-shake">
             {error}
           </div>
         )}
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6"
+          className="bg-white shadow-xl rounded-xl px-8 pt-6 pb-8 mb-4 space-y-6 animate-scale-in"
         >
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <Mail className="w-4 h-4 mr-2" />
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="your.email@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <Lock className="w-4 h-4 mr-2" />
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <User className="w-4 h-4 mr-2" />
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="John Doe"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
                 Age
               </label>
               <input
@@ -114,30 +137,31 @@ export default function PatientRegistration() {
                 required
                 value={formData.age || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                className="input-field"
+                placeholder="25"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <Users className="w-4 h-4 mr-2" />
                 Gender
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                className="input-field"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <Weight className="w-4 h-4 mr-2" />
                 Weight (kg)
               </label>
               <input
@@ -146,12 +170,14 @@ export default function PatientRegistration() {
                 step="0.1"
                 value={formData.weight || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                className="input-field"
+                placeholder="70.5"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <Ruler className="w-4 h-4 mr-2" />
                 Height (cm)
               </label>
               <input
@@ -159,30 +185,39 @@ export default function PatientRegistration() {
                 name="height"
                 value={formData.height || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                className="input-field"
+                placeholder="175"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 flex items-center">
+                <FileText className="w-4 h-4 mr-2" />
+                Medical History
+              </label>
+              <textarea
+                name="medical_history"
+                value={formData.medical_history}
+                onChange={handleChange}
+                rows={4}
+                className="input-field"
+                placeholder="Any relevant medical history..."
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Medical History
-            </label>
-            <textarea
-              name="medical_history"
-              value={formData.medical_history}
-              onChange={handleChange}
-              rows={4}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-            />
+          <div className="flex justify-end space-x-4 pt-6">
+            <button
+              type="button"
+              onClick={() => navigate("/auth")}
+              className="btn-secondary"
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary">
+              Register
+            </button>
           </div>
-
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Register
-          </button>
         </form>
       </div>
     </div>
