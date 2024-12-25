@@ -52,12 +52,12 @@ export async function analyzeECG(imageFile: File): Promise<ECGRecord> {
   const data = await response.json();
 
   // Use the processed image URL or keep original
-  const processedImageUrl = data.processedImageUrl || originalImageUrl;
+  const processedImageUrl = originalImageUrl;
 
   return {
     id: crypto.randomUUID(),
     patientEmail: sessionStorage.getItem('userEmail') || '',
-    originalImageUrl: data.originalImageUrl,
+    originalImageUrl: originalImageUrl,
     processedImageUrl,
     prediction: data.prediction || 'Unpredicted',
     timestamp: new Date(),
