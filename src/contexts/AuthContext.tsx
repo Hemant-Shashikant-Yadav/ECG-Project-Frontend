@@ -10,29 +10,29 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const login = async (email: string, password: string) => {
-    const user = await validateUser(email, password);
-    if (user) {
-      setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      throw new Error('Invalid credentials');
-    }
+    // Temporary mock login for testing
+    const mockUser = {
+      id: 1,
+      name: 'Test User',
+      email,
+      role: email.includes('doctor') ? 'doctor' : 'patient',
+      created_at: new Date().toISOString()
+    };
+    
+    setUser(mockUser);
+    localStorage.setItem('user', JSON.stringify(mockUser));
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
   };
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
