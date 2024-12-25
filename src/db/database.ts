@@ -1,19 +1,22 @@
 import { openDB } from 'idb';
-import type { Patient, Doctor } from '../types/models';
+import type { Patient, Doctor, ECGRecord } from '../types/models';
 
 const dbName = 'healthcareDB';
-const dbVersion = 1;
+const dbVersion = 2;
 
 const db = await openDB(dbName, dbVersion, {
-  upgrade(db) {
-    if (!db.objectStoreNames.contains('patients')) {
+  upgrade(db, oldVersion) {
+    if (oldVersion < 1) {
       const patientStore = db.createObjectStore('patients', { keyPath: 'email' });
       patientStore.createIndex('email', 'email', { unique: true });
-    }
 
-    if (!db.objectStoreNames.contains('doctors')) {
       const doctorStore = db.createObjectStore('doctors', { keyPath: 'email' });
       doctorStore.createIndex('email', 'email', { unique: true });
+    }
+    
+    if (oldVersion < 2) {
+      const ecgStore = db.createObjectStore('ecgRecords', { keyPath: 'id' });
+      ecgStore.createIndex('patientEmail', 'patientEmail', { unique: false });
     }
   },
 });
@@ -72,6 +75,16 @@ export async function updateDoctor(doctorData: Doctor) {
     console.error('Error updating doctor:', error);
     throw new Error('Failed to update doctor data');
   }
+}
+
+export async function saveECGRecord(record: ECGRecord) {
+  return await db.add('ecgRecords', record);
+}
+
+export async function getPatientECGRecords(email: string): Promise<ECGRecord[]> {
+  const tx = db.transaction('ecgRecords', 'readonly');
+  const index = tx.store.index('patientEmail');
+  return await index.getAll(email);
 }
 
 export default db;

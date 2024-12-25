@@ -22,3 +22,12 @@ export interface Doctor {
   contact: string;
   created_at?: Date;
 }
+
+export interface ECGRecord {
+  id: string;
+  patientEmail: string;
+  originalImageUrl: string;
+  processedImageUrl: string;
+  prediction: string;
+  timestamp: Date;
+}

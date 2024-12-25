@@ -28,6 +28,11 @@ export default function LoginForm({ onSignUpClick }: LoginFormProps) {
       }
 
       if (user && user.password === password) {
+        // Store email in session storage
+        sessionStorage.setItem('userEmail', email);
+        sessionStorage.setItem('userRole', role);
+        
+        // Navigate to appropriate dashboard
         navigate(role === 'doctor' ? '/doctor-dashboard' : '/patient-dashboard');
       } else {
         setError('Invalid credentials');
