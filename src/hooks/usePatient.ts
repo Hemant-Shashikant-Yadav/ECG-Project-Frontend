@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getPatientByEmail } from '../db/database';
+import { getPatient } from '../services/api';
 import type { Patient } from '../types/models';
 
 export function usePatient() {
@@ -14,12 +14,8 @@ export function usePatient() {
         if (!email) {
           throw new Error('No user email found');
         }
-        const patientData = await getPatientByEmail(email);
-        if (patientData) {
-          setPatient(patientData);
-        } else {
-          setError('Patient not found');
-        }
+        const patientData = await getPatient(email);
+        setPatient(patientData);
       } catch (err) {
         setError('Failed to load patient data');
         console.error(err);

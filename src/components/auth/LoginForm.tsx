@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getPatientByEmail, getDoctorByEmail } from '../../db/database';
+import { login } from '../../services/api';
 
 interface LoginFormProps {
   onSignUpClick: () => void;
@@ -20,25 +20,12 @@ export default function LoginForm({ onSignUpClick }: LoginFormProps) {
     const password = formData.get('password') as string;
 
     try {
-      let user;
-      if (role === 'patient') {
-        user = await getPatientByEmail(email);
-      } else {
-        user = await getDoctorByEmail(email);
-      }
-
-      if (user && user.password === password) {
-        // Store email in session storage
-        sessionStorage.setItem('userEmail', email);
-        sessionStorage.setItem('userRole', role);
-        
-        // Navigate to appropriate dashboard
-        navigate(role === 'doctor' ? '/doctor-dashboard' : '/patient-dashboard');
-      } else {
-        setError('Invalid credentials');
-      }
+      const user = await login(email, password, role);
+      sessionStorage.setItem('userEmail', email);
+      sessionStorage.setItem('userRole', role);
+      navigate(role === 'doctor' ? '/doctor-dashboard' : '/patient-dashboard');
     } catch (err) {
-      setError('An error occurred during login');
+      setError('Invalid credentials');
       console.error(err);
     }
   };

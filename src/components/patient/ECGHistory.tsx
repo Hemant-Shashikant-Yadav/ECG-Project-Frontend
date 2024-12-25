@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { getPatientECGRecords } from "../../db/database";
-import type { ECGRecord } from "../../types/models";
-import ECGUpload from "./ECGUpload";
+import React, { useState, useEffect } from 'react';
+import { getPatientECGRecords } from '../../services/api';
+import type { ECGRecord } from '../../types/models';
+import ECGUpload from './ECGUpload';
 
 export default function ECGHistory() {
   const [records, setRecords] = useState<ECGRecord[]>([]);
 
   const loadRecords = async () => {
-    const email = sessionStorage.getItem("userEmail");
+    const email = sessionStorage.getItem('userEmail');
     if (email) {
-      const patientRecords = await getPatientECGRecords(email);
-      setRecords(
-        patientRecords.sort(
-          (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-        )
-      );
+      try {
+        const patientRecords = await getPatientECGRecords(email);
+        setRecords(patientRecords.sort((a, b) => 
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        ));
+      } catch (error) {
+        console.error('Failed to load ECG records:', error);
+      }
     }
   };
 
@@ -32,13 +34,10 @@ export default function ECGHistory() {
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {records.map((record) => (
-          <div
-            key={record.id}
-            className="bg-white shadow rounded-lg overflow-hidden"
-          >
+          <div key={record.id} className="bg-white shadow rounded-lg overflow-hidden">
             <img
               src={record.originalImageUrl}
-              alt="Original ECG"
+              alt="ECG"
               className="w-full h-48 object-cover"
             />
             <div className="p-4">

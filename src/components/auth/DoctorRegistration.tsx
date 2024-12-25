@@ -1,41 +1,45 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createDoctor } from '../../db/database';
-import type { Doctor } from '../../types/models';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { register } from "../../services/api";
+import type { Doctor } from "../../types/models";
 
 export default function DoctorRegistration() {
   const navigate = useNavigate();
-  const [error, setError] = useState('');
-  const [formData, setFormData] = useState<Omit<Doctor, 'created_at'>>({
-    email: '',
-    password: '',
-    name: '',
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState<Omit<Doctor, "created_at">>({
+    email: "",
+    password: "",
+    name: "",
     age: 0,
-    gender: 'male',
-    specialization: '',
+    gender: "male",
+    specialization: "",
     experience: 0,
-    designation: '',
-    contact: ''
+    designation: "",
+    contact: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    
+    setError("");
+
     try {
-      await createDoctor(formData);
-      navigate('/doctor-dashboard');
+      await register(formData, "doctor");
+      sessionStorage.setItem("userEmail", formData.email);
+      sessionStorage.setItem("userRole", "doctor");
+      navigate("/doctor-dashboard");
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Registration failed');
-      console.error('Registration failed:', error);
+      setError(error instanceof Error ? error.message : "Registration failed");
+      console.error("Registration failed:", error);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'number' ? (value ? Number(value) : 0) : value
+      [name]: type === "number" ? (value ? Number(value) : 0) : value,
     }));
   };
 
@@ -45,16 +49,21 @@ export default function DoctorRegistration() {
         <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">
           Doctor Registration
         </h2>
-        
+
         {error && (
           <div className="mb-4 p-2 text-sm text-red-700 bg-red-100 rounded-md">
             {error}
           </div>
         )}
-        
-        <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6">
+
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6"
+        >
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -66,7 +75,9 @@ export default function DoctorRegistration() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               name="password"
@@ -78,7 +89,9 @@ export default function DoctorRegistration() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
@@ -91,19 +104,23 @@ export default function DoctorRegistration() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Age</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Age
+              </label>
               <input
                 type="number"
                 name="age"
                 required
-                value={formData.age || ''}
+                value={formData.age || ""}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Gender</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Gender
+              </label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -118,7 +135,9 @@ export default function DoctorRegistration() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Specialization</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Specialization
+            </label>
             <input
               type="text"
               name="specialization"
@@ -131,19 +150,23 @@ export default function DoctorRegistration() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Experience (years)</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Experience (years)
+              </label>
               <input
                 type="number"
                 name="experience"
                 required
-                value={formData.experience || ''}
+                value={formData.experience || ""}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Designation</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Designation
+              </label>
               <input
                 type="text"
                 name="designation"
@@ -156,7 +179,9 @@ export default function DoctorRegistration() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Contact Number</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Contact Number
+            </label>
             <input
               type="tel"
               name="contact"

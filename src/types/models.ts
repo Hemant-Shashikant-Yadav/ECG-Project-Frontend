@@ -27,7 +27,6 @@ export interface ECGRecord {
   id: string;
   patientEmail: string;
   originalImageUrl: string;
-  processedImageUrl: string;
   prediction: string;
   timestamp: Date;
 }

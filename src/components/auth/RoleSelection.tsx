@@ -1,8 +1,7 @@
-import React from 'react';
-import { UserCircle, Stethoscope } from 'lucide-react';
+import { UserCircle, Stethoscope } from "lucide-react";
 
 interface RoleSelectionProps {
-  onRoleSelect: (role: 'patient' | 'doctor') => void;
+  onRoleSelect: (role: "patient" | "doctor") => void;
 }
 
 export default function RoleSelection({ onRoleSelect }: RoleSelectionProps) {
@@ -18,7 +17,7 @@ export default function RoleSelection({ onRoleSelect }: RoleSelectionProps) {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <div className="space-y-4">
             <button
-              onClick={() => onRoleSelect('patient')}
+              onClick={() => onRoleSelect("patient")}
               className="w-full flex items-center justify-center space-x-3 px-4 py-4 border rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <UserCircle className="w-6 h-6" />
@@ -26,7 +25,7 @@ export default function RoleSelection({ onRoleSelect }: RoleSelectionProps) {
             </button>
 
             <button
-              onClick={() => onRoleSelect('doctor')}
+              onClick={() => onRoleSelect("doctor")}
               className="w-full flex items-center justify-center space-x-3 px-4 py-4 border rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <Stethoscope className="w-6 h-6" />
