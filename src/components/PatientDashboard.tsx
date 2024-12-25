@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { updatePatient } from "../services/api";
 import { usePatient } from "../hooks/usePatient";
 import type { Patient } from "../types/models";
-import DashboardLayout from "./layout/DashboardLayout";
+import Navbar from "./layout/Navbar";
 import PatientInfo from "./patient/PatientInfo";
 import ECGHistory from "./patient/ECGHistory";
 import PatientEditModal from "./PatientEditModal";
@@ -33,9 +33,14 @@ export default function PatientDashboard() {
   };
 
   return (
-    <DashboardLayout title="HeartGuard AI - Patient Portal">
-      <PatientInfo patient={patient} onEdit={() => setIsEditing(true)} />
-      <ECGHistory />
+    <div className="min-h-screen bg-gray-100">
+      <Navbar title="HeartGuard AI - Patient Portal" />
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <PatientInfo patient={patient} onEdit={() => setIsEditing(true)} />
+          <ECGHistory />
+        </div>
+      </main>
 
       {isEditing && (
         <PatientEditModal
@@ -44,6 +49,6 @@ export default function PatientDashboard() {
           onSave={handleSave}
         />
       )}
-    </DashboardLayout>
+    </div>
   );
 }
