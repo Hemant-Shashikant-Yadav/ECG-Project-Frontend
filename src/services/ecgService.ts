@@ -9,6 +9,7 @@ export async function analyzeECG(imageFile: File): Promise<ECGRecord> {
   formData.append('file', imageFile);  // Ensure 'file' matches Flask's key
 
   const response = await fetch('http://localhost:8000/api/predict', {
+    // const response = await fetch('https://ecs-backend-e4ii.vercel.app/api/predict', {
     method: 'POST',
     body: formData,
   });
